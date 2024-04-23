@@ -11,52 +11,74 @@ The goal of this project is to develop an efficient data pipeline that streamlin
 To get started with the GitHub Gems project, follow these steps (click on the
 links for guides):
 
-1. Set up your development environment by installing the necessary tools and dependencies. (VSCode, Python, PostgreSQL).
+### Set up your IDE
 
-  a. [Install Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-  b. [Install VSCode](https://www.postgresql.org/download/)
-  c. [Install Python](https://www.python.org/downloads/)
-  d. [Install PostgreSQL](https://www.postgresql.org/download/)
+> ℹ️ Skip some steps if you're already set!
+>
+> If you already have git, VSCode, and/or Python installed, just skip the corresponding step(s).
 
-2. [Fork this repository](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo#forking-a-repository) to your own GitHub account.
+1. If you don't already use git, [install it here](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
 
-  a. Choose yourself as the owner.
-  b. Modify the description to remove mentions of a template.
+2. If you don't have a coding editor installed, [install VSCode](https://code.visualstudio.com/download). After that, [install the Python and Python extension](https://code.visualstudio.com/docs/languages/python#_install-python-and-the-python-extension).
 
-3. [Clone the forked
-   repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository#cloning-a-repository) to your local machine.
+3. Make sure you have Python 3 installed (or [install it here](https://www.python.org/downloads/)).
 
-  a. You can use the HTTPS to clone your forked repo.
+### Create your personal repo
+
+1. [Create a new repo](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository) in your Github account and name it `github-stars-pipeline`.
+
+2. Clone this repo.
+
+```bash
+git clone https://github.com/edsioufi/github-stars-pipeline.git
+```
 
 
-4. Create a python virtual environment for your repo
+3. Point your local clone to your own remote (so that you can modify your copy of the repo, not the template). Make sure you repalce `{your_github_username}` with the corresponding value.
 
-  a. Open a command line and cd into your repo folder.
-  b. Run `python -m venv venv`
-  c. Run `source venv/bin/activate`
-  d. Make sure that your new virtual environment is activated.
+```bash
+cd github-stars-pipeline
+git remote set-url origin https://github.com/{your_github_username}/github-stars-pipeline.git
+```
 
-5. Install python dependencies
+4. Push to your new github repo.
 
-  a. [Install dbt using pip](https://docs.getdbt.com/docs/core/pip-install).
-  b. [Install Airflow using
-  pip](https://airflow.apache.org/docs/apache-airflow/stable/installation/installing-from-pypi.html)
+```bash
+git push origin master
+```
 
-6. Create a new branch to update this readme file and save your python
-   dependencies.
+### Set up your python environment and DuckDB
 
-7. Save your python dependencies by running `pip freeze > requirements.txt`
+1. Create a python virtual environment for your repo:
 
-## Data Sampling Methodology
+```bash
+python -m venv venv
+source venv/bin/activate
+```
 
-The data provided in the `/data` folder is a curated subset of the [GitHub Archive (GHA)](https://www.gharchive.org/) dataset, which records the public GitHub timeline. As the complete GHA dataset is approximately 17TB in size, it was necessary to sample the data to make it manageable for this project. However, it's important to note that this sampling approach introduces some caveats compared to working with the real-life GHA data, and our data ingestion process will differ slightly. The sampling process was as follows:
+2. [Install DuckDB](https://duckdb.org/docs/installation/?version=stable&environment=python) (make sure you select the Python option), your first python dependency.
 
-1. Seven representative repositories related to data engineering were selected as a starting point, including popular projects like Plotly. What else would you expect, given our love for data?
+> ℹ️ You might have to install additional dependencies if you're on Windows.
 
-2. All events for these seven repositories were extracted from the GHA dataset, up until March 27, 2023. This resulted in a total of 244,066 events.
+3. [Install DBeaver](https://duckdb.org/docs/guides/sql_editors/dbeaver.html) to explore DuckDB.
 
-3. To reduce the size of the dataset, fields that are unnecessary for our analysis, such as repository URLs and user IDs, were removed.
+4. Create a new git branch:
+```bash
+git checkout -b add_duck_db
+```
 
-4. The original GHA data is organized into hourly JSON files. To make the data more manageable, the events were aggregated into daily JSON files, resulting in a total of 3,840 files.
+5. Add your newly installed packages to your requirements file:
+```bash
+pip freeze > requirements.txt
+```
 
-By using this curated dataset, we can dive into the data and perform meaningful analyses without the need for extensive data preprocessing or prohibitively large computational resources. However, it's crucial to keep in mind that this sampled dataset may not fully represent the entire GHA dataset, and certain insights or patterns unique to the complete dataset may not be discoverable in this subset.
+6. Commit and push:
+```bash
+git add --all
+git commit
+git push origin -u add_duck_db
+```
+
+7. [Create a Pull Request (PR)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) in Github.
+
+8. [Merge your first PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request#merging-a-pull-request).
