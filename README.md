@@ -1,10 +1,28 @@
 # GitHub Gems: Driving Open-Source Investments With Data
 
-Welcome to the GitHub Gems project! This project hosts a data analytics pipeline that enables smarter investment decisions by measuring the popularity of open-source repos on Github.
+## Project Title and Description
+**GitHub Gems: Driving Open-Source Investments With Data**
 
-## Project Overview
+This ETL (Extract, Transform, Load) project provides an insightful analysis of GitHub open-source projects. Designed for investors and companies considering open-source investments, it offers a detailed view of project dynamics, community engagement, and technological innovation. Data sourced daily from GH Archive is processed and presented in a SQL database format, enabling straightforward querying and advanced analysis.
 
-The goal of this project is to develop an efficient data pipeline that streamlines analytics, reduces manual effort, and enables deeper insights into the open-source ecosystem on GitHub. By leveraging modern data tools and best practices, such as dbt (data build tool) and Airflow, we aim to create a scalable and reliable solution for data-driven decision-making.
+## Key Metrics Targeted
+The ETL pipeline targets an array of metrics to provide a multidimensional understanding of open-source projects:
+
+- **Popularity Metrics:** Tracks the growth rate of repositories based on stars and forks to gauge overall popularity.
+- **Contribution Metrics:** Assesses contributions through commit activities and pull request rates to understand developer involvement.
+- **Influence Score:** A composite metric that integrates various signals such as stars, forks, and issues to evaluate the project's influence.
+- **Developer Engagement Index:** Measures the frequency and recency of contributions, indicating active development and project health.
+- **Issue Resolution Efficiency:** Analyzes how quickly issues are resolved, offering insights into the project's operational efficiency.
+- **Dependency Risk Analysis:** Examines the number and reliability of project dependencies to assess stability risks.
+- **Innovation Rate:** Monitors the introduction of new features and technologies, identifying projects that are at the forefront of innovation.
+- **Funding and Sponsorship Activity:** Tracks sponsorship activities to gauge financial support and commercial interest in the project.
+
+## Data Update Frequency
+- **Daily Updates:** The data warehouse is updated on a daily basis to ensure the most current data is available for analysis. This frequent refresh rate allows for up-to-date insights and trend monitoring.
+
+## Models Provided
+- **SQL Database Access:** Data is delivered in a SQL database format, facilitating easy access and custom query capabilities for detailed analysis.
+- **Custom Analysis Capability:** Future enhancements will include the ability to perform ad-hoc custom analyses, allowing users to tailor insights to specific requirements.
 
 ## Getting Started
 
@@ -30,7 +48,7 @@ links for guides):
 2. Clone this repo.
 
 ```bash
-git clone https://github.com/edsioufi/github-stars-pipeline.git
+git clone https://github.com/parameshwarbhat411/github-stars-pipeline.git
 ```
 
 
@@ -67,18 +85,3 @@ source venv/bin/activate
 git checkout -b add_duck_db
 ```
 
-5. Add your newly installed packages to your requirements file:
-```bash
-pip freeze > requirements.txt
-```
-
-6. Commit and push:
-```bash
-git add --all
-git commit
-git push origin -u add_duck_db
-```
-
-7. [Create a Pull Request (PR)](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request#creating-the-pull-request) in Github.
-
-8. [Merge your first PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/merging-a-pull-request#merging-a-pull-request).
