@@ -1,15 +1,17 @@
-# GitHub Gems: Driving Open-Source Investments With Data
+# GitHub Open Source ETL Pipeline
 
-## Project Title and Description
-**GitHub Gems: Driving Open-Source Investments With Data**
+## Overview
+**GitHub Open Source ETL Pipeline**
 
-This ETL (Extract, Transform, Load) project provides an insightful analysis of GitHub open-source projects. Designed for investors and companies considering open-source investments, it offers a detailed view of project dynamics, community engagement, and technological innovation. Data sourced daily from GH Archive is processed and presented in a SQL database format, enabling straightforward querying and advanced analysis.
+This ETL (Extract, Transform, Load) project provides an insightful analysis of GitHub open-source repositories. Designed for investors and companies considering open-source investments, it offers a detailed view of project dynamics, community engagement, and technological innovation. Data sourced daily from GH Archive is processed and presented in a SQL database format, enabling straightforward querying and advanced analysis.
 
 ## Key Metrics Targeted
-The ETL pipeline targets an array of metrics to provide a multidimensional understanding of open-source projects:
+The ETL pipeline targets an array of metrics to provide a multidimensional understanding of open-source repositories:
 
 - **Popularity Metrics:** Tracks the growth rate of repositories based on stars and forks to gauge overall popularity.
 - **Contribution Metrics:** Assesses contributions through commit activities and pull request rates to understand developer involvement.
+
+## Future work 
 - **Influence Score:** A composite metric that integrates various signals such as stars, forks, and issues to evaluate the project's influence.
 - **Developer Engagement Index:** Measures the frequency and recency of contributions, indicating active development and project health.
 - **Issue Resolution Efficiency:** Analyzes how quickly issues are resolved, offering insights into the project's operational efficiency.
@@ -26,7 +28,7 @@ The ETL pipeline targets an array of metrics to provide a multidimensional under
 
 ## Getting Started
 
-To get started with the GitHub Gems project, follow these steps (click on the
+To get started with the work, follow these steps (click on the
 links for guides):
 
 ### Set up your IDE
