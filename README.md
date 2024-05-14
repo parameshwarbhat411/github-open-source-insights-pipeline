@@ -26,6 +26,70 @@ The ETL pipeline targets an array of metrics to provide a multidimensional under
 - **SQL Database Access:** Data is delivered in a SQL database format, facilitating easy access and custom query capabilities for detailed analysis.
 - **Custom Analysis Capability:** Future enhancements will include the ability to perform ad-hoc custom analyses, allowing users to tailor insights to specific requirements.
 
+## Models
+
+### Introduction
+We use Kimball dimensional models to structure our data warehouse. This approach ensures efficient querying and analysis.
+
+### Fact and Dimension Models
+
+#### Fact Tables
+- **fact_stars**
+  - `event_id` (Primary Key)
+  - `repo_id` (Foreign Key to `dim_repositories`)
+  - `user_id` (Foreign Key to `dim_users`)
+  - `event_date` (Date)
+
+- **fact_commits**
+  - `event_id` (Primary Key)
+  - `repo_id` (Foreign Key to `dim_repositories`)
+  - `user_id` (Foreign Key to `dim_users`)
+  - `event_date` (Date)
+
+#### Aggregate Fact Tables
+- **fact_stars_weekly**
+  - `event_id` (Primary Key)
+  - `repo_id` (Foreign Key to `dim_repositories`)
+  - `user_id` (Foreign Key to `dim_users`)
+  - `week` (Date)
+
+- **fact_stars_monthly**
+  - `event_id` (Primary Key)
+  - `repo_id` (Foreign Key to `dim_repositories`)
+  - `user_id` (Foreign Key to `dim_users`)
+  - `month` (Date)
+
+- **fact_commits_weekly**
+  - `event_id` (Primary Key)
+  - `repo_id` (Foreign Key to `dim_repositories`)
+  - `user_id` (Foreign Key to `dim_users`)
+  - `week` (Date)
+
+- **fact_commits_monthly**
+  - `event_id` (Primary Key)
+  - `repo_id` (Foreign Key to `dim_repositories`)
+  - `user_id` (Foreign Key to `dim_users`)
+  - `month` (Date)
+
+#### Dimension Tables
+- **dim_repositories**
+  - `repo_id` (Primary Key)
+  - `repo_name`
+  - `owner_login`
+
+- **dim_users**
+  - `user_id` (Primary Key)
+  - `login`
+
+### Sample SQL Queries
+
+#### Types of SQL Queries You Can Perform
+
+- **Calculate Growth Rate of Stars**: Aggregate and analyze the growth rate of stars for a particular repository over a specified period.
+- **Year-on-Year Growth Analysis**: Evaluate the year-on-year growth in stars or commits for specific repositories to understand their performance over time.
+
+These are the types of aggregation and analysis queries you can perform using the data provided by our ETL pipeline. These queries facilitate in-depth insights into the dynamics of GitHub repositories, supporting data-driven decision-making.
+
 ## Getting Started
 
 To get started with the work, follow these steps (click on the
