@@ -9,6 +9,11 @@ import glob
 class ExtractLoad:
     db_path = 'file.db'
 
+    """
+    function to unzip the gharchives folder and copy, paste the content
+    to a temporary directory and Using the temporary directory as a source to
+    ingest the data to duckDB table
+    """
     def extract_load(self, source_directory,temp_dir_path):
         try:
             tmp_dir_name = tempfile.TemporaryDirectory(dir=temp_dir_path)
