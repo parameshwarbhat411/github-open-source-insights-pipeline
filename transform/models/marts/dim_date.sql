@@ -1,1 +1,5 @@
-{{ dbt_date.get_date_dimension("1990-01-01", "2050-12-31") }}
+{{ dbt_utils.date_spine(
+  datepart="month",
+  start_date="cast('2010-01-01' as date)",
+  end_date="cast('2024-01-01' as date)"
+) }}
