@@ -9,6 +9,8 @@ JOIN
     {{ ref('dim_repos') }} dr
 ON
     stg.repo_id = dr.repo_id
+    AND stg.event_date >= dr.start_date
+    AND (stg.event_date < dr.end_date OR dr.end_date IS NULL)
 JOIN
     {{ ref('dim_users') }} du
 ON

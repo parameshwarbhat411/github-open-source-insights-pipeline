@@ -1,35 +1,35 @@
 {% macro fact_event_type_monthly(fact_table, event_count, last_year_event_count) %}
 
-with repo_date_range as (
-  select
+WITH repo_date_range AS (
+  SELECT
     repo_id,
-    min(event_date) as min_date,
-    max(event_date) as max_date
-  from {{ ref(fact_table)}}
-  group by 1
+    MIN(event_date) AS min_date,
+    MAX(event_date) AS max_date
+  FROM {{ ref(fact_table)}}
+  GROUP BY 1
 ),
 
-repo_month_spine as (
-  select
+repo_month_spine AS (
+  SELECT
     rd.repo_id,
     d.date_month
-  from {{ ref('dim_date') }} as d
-  join repo_date_range as rd
-    on d.date_month
-    between date_trunc('month', rd.min_date)
-    and date_trunc('month', rd.max_date)
+  FROM {{ ref('dim_date') }} AS d
+  JOIN repo_date_range AS rd
+    ON d.date_month
+    BETWEEN DATE_TRUNC('month', rd.min_date)
+    AND DATE_TRUNC('month', rd.max_date)
 )
 
-select
+SELECT
   rm.date_month,
   rm.repo_id,
-  sum(case when s.event_date is null then 0 else 1 end) as {{ event_count }},
-  lag({{ event_count }}, 12) over (partition by rm.repo_id order by rm.date_month) as {{ last_year_event_count }},
-  ({{ event_count }} / {{ last_year_event_count }}) - 1 as yoy_growth
-from repo_month_spine as rm
-  left join {{ ref(fact_table) }} as s
-  on rm.date_month = date_trunc('month', s.event_date)
-  and rm.repo_id = s.repo_id
-group by 1, 2
+  SUM(CASE WHEN s.event_date IS NULL THEN 0 ELSE 1 END) AS {{ event_count }},
+  LAG({{ event_count }}, 12) OVER (PARTITION BY rm.repo_id ORDER BY rm.date_month) AS {{ last_year_event_count }},
+ IFNULL( ({{ event_count }} / {{ last_year_event_count }}) - 1 , 1) AS yoy_growth
+FROM repo_month_spine AS rm
+  LEFT JOIN {{ ref(fact_table) }} AS s
+  ON rm.date_month = date_trunc('month', s.event_date)
+  AND rm.repo_id = s.repo_id
+GROUP BY 1, 2
 
 {% endmacro %}
