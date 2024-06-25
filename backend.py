@@ -1,12 +1,13 @@
 from flask import Flask, jsonify, request
 import duckdb
+import os
 
 app = Flask(__name__)
-
+db_path = os.getenv('DB_PATH', 'file.db')
 
 def get_latest_repos():
     # Connect to your database (update the connection string as needed)
-    conn = duckdb.connect('file.db')
+    conn = duckdb.connect(db_path)
     cursor = conn.cursor()
 
     # Fetch the latest named repos
@@ -27,7 +28,7 @@ def get_latest_repos():
 
 def get_repo_data(repo_id):
     # Connect to your database (update the connection string as needed)
-    conn = duckdb.connect('file.db')
+    conn = duckdb.connect(db_path)
     cursor = conn.cursor()
 
     # Fetch data for the specific repo
@@ -55,4 +56,4 @@ def latest_repos():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

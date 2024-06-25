@@ -3,10 +3,12 @@ import pandas as pd
 import requests
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
-# Function to fetch latest repos from the backend
+FLASK_BACKEND_URL = os.getenv('FLASK_BACKEND_URL', 'http://localhost:5001')
+
 def fetch_latest_repos():
-    response = requests.get('http://127.0.0.1:5000/latest_repos')
+    response = requests.get(f'{FLASK_BACKEND_URL}/latest_repos')
     if response.status_code == 200:
         return response.json()
     else:
@@ -14,7 +16,7 @@ def fetch_latest_repos():
 
 # Function to fetch repo data for visualizations
 def fetch_repo_data(repo_id):
-    response = requests.get(f'http://127.0.0.1:5000/repo_data?repo_id={repo_id}')
+    response = requests.get(f'{FLASK_BACKEND_URL}/repo_data?repo_id={repo_id}')
     if response.status_code == 200:
         return response.json()
     else:
