@@ -13,7 +13,7 @@ repo_month_spine AS (
   SELECT
     rd.repo_id,
     d.date_month
-  FROM {{ ref('dim_date') }} AS d
+  FROM {{ ref("dim_date_month") }} AS d
   JOIN repo_date_range AS rd
     ON d.date_month
     BETWEEN DATE_TRUNC('month', rd.min_date)
