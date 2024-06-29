@@ -7,6 +7,29 @@ import os
 
 FLASK_BACKEND_URL = os.getenv('FLASK_BACKEND_URL', 'http://localhost:5001')
 
+
+# Helper function to plot with rolling average
+def plot_with_rolling_average(df, y_col, title, ylabel, window=4):
+    df['rolling_avg'] = df[y_col].rolling(window=window).mean()
+    plt.figure(figsize=(10, 6))
+    sns.lineplot(data=df, x='date', y='rolling_avg')
+    plt.title(title)
+    plt.xlabel('Date')
+    plt.ylabel(ylabel)
+    st.pyplot(plt)
+
+
+# Helper function to plot line charts with proper spacing for week-on-week growth
+def plot_line_chart(df, y_col, title, ylabel):
+    plt.figure(figsize=(10, 6))
+    sns.lineplot(data=df, x='date', y=y_col)
+    plt.title(title)
+    plt.xlabel('Date')
+    plt.ylabel(ylabel)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    st.pyplot(plt)
+
 def fetch_latest_repos():
     response = requests.get(f'{FLASK_BACKEND_URL}/latest_repos')
     if response.status_code == 200:
@@ -14,13 +37,15 @@ def fetch_latest_repos():
     else:
         return []
 
+
 # Function to fetch repo data for visualizations
 def fetch_repo_data(repo_id):
-    response = requests.get(f'{FLASK_BACKEND_URL}/repo_data?repo_id={repo_id}')
+    response = requests.get(f'{FLASK_BACKEND_URL}/repo_data_all?repo_id={repo_id}')
     if response.status_code == 200:
         return response.json()
     else:
         return []
+
 
 # Streamlit app
 st.title('GitHub Repository Viewer')
@@ -44,58 +69,69 @@ if st.button('Go to Dashboard'):
 
     # Fetch data for the selected repo
     repo_data = fetch_repo_data(repo_id)
-    df_repo_data = pd.DataFrame(repo_data, columns=['date_month', 'repo_id', 'star_count', 'last_year_star_count', 'yoy_growth'])
-    df_repo_data['date_month'] = pd.to_datetime(df_repo_data['date_month'], format='%a, %d %b %Y %H:%M:%S %Z',
-                                                errors='coerce')
-    # Plot: Monthly Star Count Over Time
-    st.header(f'Growth Over Time for {repo_name}')
+
+    # Create DataFrames from the dictionary
+    df_stars_weekly = pd.DataFrame(repo_data['stars_weekly'],
+                                   columns=['date', 'repo_id', 'star_count', 'last_week_star_count', 'wow_growth'])
+    df_stars_monthly = pd.DataFrame(repo_data['stars_monthly'],
+                                    columns=['date', 'repo_id', 'star_count', 'last_year_star_count', 'yoy_growth'])
+    df_commits_weekly = pd.DataFrame(repo_data['commits_weekly'],
+                                     columns=['date', 'repo_id', 'commits_count', 'last_week_commit_count',
+                                              'wow_growth'])
+    df_commits_monthly = pd.DataFrame(repo_data['commits_monthly'],
+                                      columns=['date', 'repo_id', 'commits_count', 'last_year_commit_count',
+                                               'yoy_growth'])
+
+    # Convert the 'date' column to datetime format
+    df_commits_monthly['date'] = pd.to_datetime(df_commits_monthly['date'], format='%a, %d %b %Y %H:%M:%S %Z')
+    df_commits_weekly['date'] = pd.to_datetime(df_commits_weekly['date'], format='%a, %d %b %Y %H:%M:%S %Z')
+    df_stars_monthly['date'] = pd.to_datetime(df_stars_monthly['date'], format='%a, %d %b %Y %H:%M:%S %Z')
+    df_stars_weekly['date'] = pd.to_datetime(df_stars_weekly['date'], format='%a, %d %b %Y %H:%M:%S %Z')
+
+    # Plotting Monthly Data
+    st.header(f'Monthly Data for {repo_name}')
+
+    st.subheader('Stars Monthly')
     plt.figure(figsize=(10, 6))
-    sns.lineplot(data=df_repo_data, x='date_month', y='star_count')
+    sns.lineplot(data=df_stars_monthly, x='date', y='star_count')
     plt.title('Monthly Star Count Over Time')
     plt.xlabel('Date')
     plt.ylabel('Star Count')
     st.pyplot(plt)
 
-    # Plot: Year-on-Year Growth Over Time
-    st.header(f'Year-on-Year Growth for {repo_name}')
     plt.figure(figsize=(10, 6))
-    sns.lineplot(data=df_repo_data, x='date_month', y='yoy_growth')
-    plt.title('Year-on-Year Growth Over Time')
+    sns.lineplot(data=df_stars_monthly, x='date', y='yoy_growth')
+    plt.title('Year-on-Year Growth Over Time of Stars')
     plt.xlabel('Date')
     plt.ylabel('Year-on-Year Growth')
     st.pyplot(plt)
 
-    # Plot: Cumulative Star Count Over Time
-    df_repo_data['cumulative_stars'] = df_repo_data['star_count'].cumsum()
-    st.header(f'Cumulative Star Count for {repo_name}')
+    st.subheader('Commits Monthly')
     plt.figure(figsize=(10, 6))
-    sns.lineplot(data=df_repo_data, x='date_month', y='cumulative_stars')
-    plt.title('Cumulative Star Count Over Time')
+    sns.lineplot(data=df_commits_monthly, x='date', y='commits_count')
+    plt.title('Monthly Commit Count Over Time')
     plt.xlabel('Date')
-    plt.ylabel('Cumulative Star Count')
+    plt.ylabel('Commit Count')
     st.pyplot(plt)
 
-    st.header(f'Monthly Star Count Area Plot for {repo_name}')
     plt.figure(figsize=(10, 6))
-    sns.lineplot(data=df_repo_data, x='date_month', y='star_count')
-    plt.fill_between(df_repo_data['date_month'], df_repo_data['star_count'], alpha=0.3)
-    plt.title('Monthly Star Count Area Plot')
+    sns.lineplot(data=df_commits_monthly, x='date', y='yoy_growth')
+    plt.title('Year-on-Year Growth Over Time of Commits')
     plt.xlabel('Date')
-    plt.ylabel('Star Count')
-    plt.gca().xaxis.set_major_locator(plt.MaxNLocator(nbins=12))
-    plt.gca().xaxis.set_major_formatter(
-    plt.matplotlib.dates.DateFormatter('%Y-%m'))  # Format x-axis labels as Year-Month
-    st.pyplot(plt)
-
-    # Plot: Star Count Comparison
-    st.header(f'Star Count Comparison for {repo_name}')
-    plt.figure(figsize=(10, 6))
-    sns.lineplot(data=df_repo_data, x='date_month', y='star_count', label='Current Year')
-    sns.lineplot(data=df_repo_data, x='date_month', y='last_year_star_count', label='Last Year')
-    plt.title('Star Count Comparison')
-    plt.xlabel('Date')
-    plt.ylabel('Star Count')
-    plt.legend()
+    plt.ylabel('Year-on-Year Growth')
     st.pyplot(plt)
 
 
+    # Plotting Weekly Data with Rolling Average
+    st.header(f'Weekly Data for {repo_name}')
+
+    st.subheader('Stars Weekly')
+    plot_with_rolling_average(df_stars_weekly, 'star_count', 'Weekly Star Count Over Time (Rolling Average)',
+                              'Star Count')
+    plot_with_rolling_average(df_stars_weekly, 'wow_growth', 'Week-on-Week Growth Over Time of Stars', 'Week-on-Week Growth')
+
+
+    st.subheader('Commits Weekly')
+    plot_with_rolling_average(df_commits_weekly, 'commits_count', 'Weekly Commit Count Over Time (Rolling Average)',
+                              'Commit Count')
+    plot_with_rolling_average(df_commits_weekly, 'wow_growth', 'Week-on-Week Growth Over Time of Commits', 'Week-on-Week Growth')
