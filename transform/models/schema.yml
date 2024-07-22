@@ -4,3 +4,44 @@ models:
       - name: repo_id
         data_tests:
           - not_null
+
+  - name: dim_date_week
+    description: "This table contains weekly date dimensions."
+    columns:
+      - name: date_week
+        description: "The starting date of the week."
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_stars_weekly
+    description: "This table aggregates weekly star events."
+    columns:
+      - name: date_week
+        description: "The starting date of the week."
+        tests:
+          - relationships:
+              to: ref('dim_date_week')
+              field: date_week
+      - name: starsCount
+        description: "The count of stars received in the week."
+      - name: last_week_star_count
+        description: "The count of stars received in the previous week."
+      - name: wow_growth
+        description: "The week-over-week growth rate of star events."
+
+  - name: fact_commits_weekly
+    description: "This table aggregates weekly commit events."
+    columns:
+      - name: date_week
+        description: "The starting date of the week."
+        tests:
+          - relationships:
+              to: ref('dim_date_week')
+              field: date_week
+      - name: commitsCount
+        description: "The count of commits made in the week."
+      - name: last_week_commit_count
+        description: "The count of commits made in the previous week."
+      - name: wow_growth
+        description: "The week-over-week growth rate of commit events."
