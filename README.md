@@ -3,7 +3,7 @@
 ## Overview
 In the rapidly evolving landscape of software development, open-source repositories on GitHub have become invaluable assets. They foster innovation and collaboration and serve as critical indicators for investors and companies looking to make informed decisions. Recognizing the importance of these repositories, this project aims to develop an ELT (Extract, Load, Transform) pipeline that provides insightful analysis of GitHub open-source repositories.
 
-Using data from GH Archive, the project aims to identify and evaluate repositories based on key metrics such as popularity and contribution activities. By leveraging these metrics, users can identify repositories with the highest stars and significant commit histories, making well-informed decisions about their investments and contributions.
+Using data from GH Archive (https://www.gharchive.org/), the project aims to identify and evaluate repositories based on key metrics such as popularity and contribution activities. By leveraging these metrics, users can identify repositories with the highest stars and significant commit histories, making well-informed decisions about their investments and contributions.
 
 ## Key Metrics Targeted
 The primary objective of this ELT pipeline is to provide a comprehensive analysis of GitHub open-source repositories, offering valuable insights for investors and companies considering open-source investments. By focusing on key metrics, the pipeline enables users to make data-driven decisions based on the performance and health of various repositories.
