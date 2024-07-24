@@ -1,4 +1,4 @@
-# GitHub Open Source ELT Pipeline
+# GitHub Open Source Insights Pipeline
 
 ## Overview
 In the rapidly evolving landscape of software development, open-source repositories on GitHub have become invaluable assets. They foster innovation and collaboration and serve as critical indicators for investors and companies looking to make informed decisions. Recognizing the importance of these repositories, this project aims to develop an ELT (Extract, Load, Transform) pipeline that provides insightful analysis of GitHub open-source repositories.
